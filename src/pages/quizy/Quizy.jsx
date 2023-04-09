@@ -28,7 +28,7 @@ function Quizy() {
   }, []);
 
   return (
-    <section className="">
+    <section>
       {loading ? (
         <div className="spinner-border" role="status">
           <span className="visually-hidden">Loading...</span>
@@ -59,6 +59,7 @@ function Quizy() {
           <table className="table text-start">
             <thead>
               <tr>
+                <th scope="col">Id</th>
                 <th scope="col">Nazwa</th>
                 <th scope="col">Ilość odpowiedzi</th>
               </tr>
@@ -66,6 +67,7 @@ function Quizy() {
             <tbody>
               {quizy.map((quiz) => (
                 <tr key={quiz._id}>
+                  <td>{quiz._id}</td>
                   <td>
                     {quiz.title}{" "}
                     {quiz.img && (
