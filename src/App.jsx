@@ -27,6 +27,7 @@ function App() {
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/add" element={<AddCourse />} />
             <Route path="/courses/edit/:id" element={<EditCourse />} />
+            <Route path="/courses/edit/:courseName/:id" element={<EditCourse />} />
             <Route path="/quizy" element={<Quizy />} />
             <Route path="/quizy/add" element={<AddQuiz />} />
             <Route path="/quizy/edit/:id" element={<EditQuiz />} />

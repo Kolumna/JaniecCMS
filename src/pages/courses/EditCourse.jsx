@@ -6,6 +6,7 @@ import List from "../../components/course/paragraphs/List";
 import Code from "../../components/course/paragraphs/Code";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { nestedObjectToArray } from "../../helpers/nestedObject";
 
 function EditCourse() {
   const [course, setCourse] = useState({
@@ -26,13 +27,13 @@ function EditCourse() {
     ],
   });
 
-  const { id } = useParams();
+  const { id, courseName } = useParams();
 
   const navigate = useNavigate();
 
   const getCourse = async () => {
     const res = await axios.get(
-      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${id}.json`
+      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${courseName}/${id}.json`
     );
     setCourse(res.data);
   };
@@ -41,8 +42,8 @@ function EditCourse() {
     e.preventDefault();
 
     await axios.patch(
-      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${id}.json`,
-      JSON.stringify({...course, editDate: new Date().toJSON()})
+      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${courseName}/${id}.json`,
+      JSON.stringify({ ...course, editDate: new Date().toJSON() })
     );
 
     navigate("/courses");
@@ -188,7 +189,7 @@ function EditCourse() {
                           img={paragraph.img}
                           setImg={(e) => {
                             const newParagrapfs = [
-                              ...course.modules[module.id].paragraphs,
+                              ...course.modules.paragraphs[module.id],
                             ];
                             newParagrapfs[paragraph.id].img = e.target.value;
                             setCourse({
@@ -201,6 +202,26 @@ function EditCourse() {
                               ],
                             });
                           }}
+                          setContent={(e) => {
+                            const newParagrapfs = [
+                              ...(course.modules[module.id].paragraphs ?? []),
+                            ];
+                            newParagrapfs[paragraph.id].value = e.target.value;
+                            setCourse({
+                              ...course,
+                              modules: [
+                                {
+                                  ...course.modules[module.id],
+                                  paragraphs: newParagrapfs,
+                                },
+                              ],
+                            });
+                          }}
+                        />
+                      )}
+                      {paragraph.type === "text" && (
+                        <Text
+                          content={paragraph.value}
                           setContent={(e) => {
                             const newParagrapfs = [
                               ...course.modules[module.id].paragraphs,
@@ -217,9 +238,6 @@ function EditCourse() {
                             });
                           }}
                         />
-                      )}
-                      {paragraph.type === "text" && (
-                        <Text content={paragraph.value} />
                       )}
                       {paragraph.type === "important" && (
                         <Important content={paragraph.value} />

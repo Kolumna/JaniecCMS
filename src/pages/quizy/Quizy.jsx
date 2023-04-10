@@ -65,9 +65,9 @@ function Quizy() {
               </tr>
             </thead>
             <tbody>
-              {quizy.map((quiz) => (
+              {quizy.map((quiz, index) => (
                 <tr key={quiz._id}>
-                  <td>{quiz._id}</td>
+                  <td>{index}</td>
                   <td>
                     {quiz.title}{" "}
                     {quiz.img && (

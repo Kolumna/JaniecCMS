@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { objectToArrayWithId } from "../../helpers/object";
 import { Link } from "react-router-dom";
+import { nestedObjectToArray } from "../../helpers/nestedObject";
 
 function Courses() {
   const [courses, setCourses] = useState([]);
@@ -12,13 +13,15 @@ function Courses() {
     const res = await axios.get(
       "https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses.json"
     );
-    setCourses(objectToArrayWithId(res.data));
+    setCourses(nestedObjectToArray(res.data));
     setLoading(false);
   };
 
   useEffect(() => {
     getCourses();
   }, []);
+
+  console.log(courses)
 
   return (
     <section>
@@ -41,8 +44,8 @@ function Courses() {
               </tr>
             </thead>
             <tbody>
-              {courses.map((course) => (
-                <tr key={course._id}>
+              {courses.map((course, key) => (
+                <tr key={key}>
                   <td>{course.name}</td>
                   <td>{course.modules.length}</td>
                   <td>{course.editDate ?? course.date}</td>
@@ -57,7 +60,9 @@ function Courses() {
                   </td>
                   <td>
                     <Link
-                      to={`/courses/edit/${course._id}`}
+                      to={`/courses/edit/${course.name.toLowerCase()}/${
+                        course._id
+                      }`}
                       className="btn btn-warning"
                     >
                       Edytuj

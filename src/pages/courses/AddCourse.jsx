@@ -5,6 +5,7 @@ import Important from "../../components/course/paragraphs/Important";
 import List from "../../components/course/paragraphs/List";
 import Code from "../../components/course/paragraphs/Code";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AddCourse() {
   const [course, setCourse] = useState({
@@ -26,13 +27,17 @@ function AddCourse() {
     date: new Date().toJSON(),
   });
 
+  const navigate = useNavigate();
+
   const postCourse = async (e) => {
     e.preventDefault();
 
     await axios.post(
-      "https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses.json",
+      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${course.name.toLowerCase()}.json`,
       course
     );
+
+    navigate("/courses");
   };
 
   const addLesson = (e) => {
@@ -202,7 +207,24 @@ function AddCourse() {
                         />
                       )}
                       {paragraph.type === "text" && (
-                        <Text content={paragraph.value} />
+                        <Text
+                          content={paragraph.value}
+                          setContent={(e) => {
+                            const newParagrapfs = [
+                              ...course.modules[module.id].paragraphs,
+                            ];
+                            newParagrapfs[paragraph.id].value = e.target.value;
+                            setCourse({
+                              ...course,
+                              modules: [
+                                {
+                                  ...course.modules[module.id],
+                                  paragraphs: newParagrapfs,
+                                },
+                              ],
+                            });
+                          }}
+                        />
                       )}
                       {paragraph.type === "important" && (
                         <Important content={paragraph.value} />
