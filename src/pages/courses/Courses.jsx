@@ -29,13 +29,15 @@ function Courses() {
       ) : (
         <div>
           <h1>Kursy</h1>
-          <Link to="/courses/add" className="btn btn-success mt-3">Dodaj kurs</Link>
+          <Link to="/courses/add" className="btn btn-success mt-3">
+            Dodaj kurs
+          </Link>
           <table className="table mt-3">
             <thead>
               <tr>
                 <th scope="col">Nazwa</th>
                 <th scope="col">Ilość lekcji</th>
-                <th scope="col">Data utworzenia</th>
+                <th scope="col">Data ostatniej edycji</th>
               </tr>
             </thead>
             <tbody>
@@ -43,12 +45,23 @@ function Courses() {
                 <tr key={course._id}>
                   <td>{course.name}</td>
                   <td>{course.modules.length}</td>
-                  <td>{course.date}</td>
+                  <td>{course.editDate ?? course.date}</td>
                   <td>
-                    <button className="btn btn-primary">Zobacz</button>
+                    <Link
+                      to={`https://examie.pl/learning/${course.name.toLowerCase()}`}
+                      target="_blank"
+                      className="btn btn-primary"
+                    >
+                      Zobacz
+                    </Link>
                   </td>
                   <td>
-                    <button className="btn btn-warning">Edytuj</button>
+                    <Link
+                      to={`/courses/edit/${course._id}`}
+                      className="btn btn-warning"
+                    >
+                      Edytuj
+                    </Link>
                   </td>
                   <td>
                     <button className="btn btn-danger">Usuń</button>

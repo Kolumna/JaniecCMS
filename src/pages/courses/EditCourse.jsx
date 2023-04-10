@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Title from "../../components/course/paragraphs/Title";
 import Text from "../../components/course/paragraphs/Text";
 import Important from "../../components/course/paragraphs/Important";
 import List from "../../components/course/paragraphs/List";
 import Code from "../../components/course/paragraphs/Code";
 import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 
-function AddCourse() {
+function EditCourse() {
   const [course, setCourse] = useState({
     name: "",
     modules: [
@@ -23,16 +24,28 @@ function AddCourse() {
         ],
       },
     ],
-    date: new Date().toJSON(),
   });
 
-  const postCourse = async (e) => {
+  const { id } = useParams();
+
+  const navigate = useNavigate();
+
+  const getCourse = async () => {
+    const res = await axios.get(
+      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${id}.json`
+    );
+    setCourse(res.data);
+  };
+
+  const patchCourse = async (e) => {
     e.preventDefault();
 
-    await axios.post(
-      "https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses.json",
-      course
+    await axios.patch(
+      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${id}.json`,
+      JSON.stringify({...course, editDate: new Date().toJSON()})
     );
+
+    navigate("/courses");
   };
 
   const addLesson = (e) => {
@@ -108,12 +121,16 @@ function AddCourse() {
     });
   };
 
-  console.log(course.modules);
+  useEffect(() => {
+    getCourse();
+  }, []);
 
   return (
     <section className="px-5" style={{ width: "100%" }}>
-      <h1>Dodaj kurs</h1>
-      <form onSubmit={postCourse}>
+      <h1>
+        Edycja kursu: <strong>{course.name}</strong>
+      </h1>
+      <form onSubmit={(e) => patchCourse(e)}>
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
             Nazwa kursu
@@ -260,7 +277,7 @@ function AddCourse() {
             )}
           </div>
           <button type="submit" className="btn btn-success mt-3">
-            Stwórz
+            Zaaktualizuj
           </button>
         </div>
       </form>
@@ -268,4 +285,4 @@ function AddCourse() {
   );
 }
 
-export default AddCourse;
+export default EditCourse;
