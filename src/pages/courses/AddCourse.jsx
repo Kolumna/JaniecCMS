@@ -1,4 +1,9 @@
 import { useState } from "react";
+import Title from "../../components/course/paragraphs/Title";
+import Text from "../../components/course/paragraphs/Text";
+import Important from "../../components/course/paragraphs/Important";
+import List from "../../components/course/paragraphs/List";
+import Code from "../../components/course/paragraphs/Code";
 
 function AddCourse() {
   const [course, setCourse] = useState({
@@ -6,10 +11,18 @@ function AddCourse() {
     modules: [
       {
         id: 0,
-        name: "",
-        paragraphs: [],
+        nazwa: "",
+        paragraphs: [
+          {
+            id: 0,
+            type: "",
+            img: "",
+            value: "",
+          },
+        ],
       },
     ],
+    date: new Date().toJSON(),
   });
 
   const addLesson = (e) => {
@@ -21,28 +34,83 @@ function AddCourse() {
         ...course.modules,
         {
           id: course.modules.length,
-          name: "",
-          paragraphs: [{ id: 0, type: "", content: "" }],
+          nazwa: "",
+          paragraphs: [
+            {
+              id: 0,
+              type: "",
+              content: "",
+            },
+          ],
         },
       ],
     });
   };
 
-  const paragraphType = (e, id) => {
+  const deleteLesson = (e) => {
     e.preventDefault();
 
-    const newParagraph = {
-      id: course.modules[id].paragraphs.length,
-      type: e.target.value,
-      content: "",
-    };
+    setCourse({
+      ...course,
+      modules: [...course.modules.slice(0, course.modules.length - 1)],
+    });
+  };
 
-    switch (e.target.value) {
-      case "Title":
-        setCourse({
-          });
-        break;
-    }
+  const paragraphType = (e, paragraph_id, module_id) => {
+    e.preventDefault();
+
+    const newParagrapfs = [...course.modules[module_id].paragraphs];
+    newParagrapfs[paragraph_id].type = e.target.value;
+
+    setCourse({
+      ...course,
+      modules: [
+        {
+          ...course.modules[module_id],
+          paragraphs: newParagrapfs,
+        },
+      ],
+    });
+  };
+
+  const addParagpraph = (e, module_id) => {
+    e.preventDefault();
+
+    setCourse({
+      ...course,
+      modules: [
+        {
+          ...course.modules[module_id],
+          paragraphs: [
+            ...course.modules[module_id].paragraphs,
+            {
+              id: course.modules[module_id].paragraphs.length,
+              type: "",
+              content: "",
+            },
+          ],
+        },
+      ],
+    });
+  };
+
+  const deleteParagraph = (e) => {
+    e.preventDefault();
+
+    setCourse({
+      ...course,
+      modules: [
+        {
+          id: course.modules.length - 1,
+          paragraphs: [
+            ...course.modules[course.modules.length - 1].paragraphs.slice(
+              0,
+              course.modules[course.modules.length - 1].paragraphs.length - 1
+            ),
+          ],
+        },
+      ],
+    });
   };
 
   console.log(course);
@@ -59,6 +127,8 @@ function AddCourse() {
             type="text"
             onChange={(e) => setCourse({ ...course, name: e.target.value })}
             className="form-control"
+            value={course.name}
+            required
           />
         </div>
         {course.modules.map((module) => (
@@ -67,42 +137,116 @@ function AddCourse() {
               <h5 className="card-title">Lekcja {module.id + 1}</h5>
 
               <label className="form-label">Nazwa lekcji</label>
-              <input type="text" className="form-control" />
+              <input
+                value={module.nazwa}
+                type="text"
+                className="form-control"
+              />
+              {module.paragraphs.map((paragraph) => (
+                <div key={paragraph.id} className="card mt-3">
+                  <div className="card-body">
+                    <div key={paragraph.id}>
+                      <h5 className="card-title">
+                        Paragraf {paragraph.id + 1}
+                      </h5>
+                      <label className="form-label mt-2">Typ paragrafu</label>
 
-              <div className="card mt-3">
-                <div className="card-body">
-                  <h5 className="card-title">Paragraf 1</h5>
-                  <label className="form-label mt-2">Typ paragrafu</label>
-
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    onChange={(e) => paragraphType(e, module.id)}
-                  >
-                    <option value="null">Wybierz typ</option>
-                    <option value="Title">Tytuł</option>
-                    <option value="Text">Tekst</option>
-                    <option value="Important">Ważne</option>
-                  </select>
-
-                  {module.paragraphs.map((paragraph) => (
-                    <div>{paragraph.type}</div>
-                  ))}
+                      <select
+                        className="form-select"
+                        onChange={(e) =>
+                          paragraphType(e, paragraph.id, module.id)
+                        }
+                        value={paragraph.type}
+                      >
+                        <option value="">Wybierz typ</option>
+                        <option value="title">Tytuł</option>
+                        <option value="text">Tekst</option>
+                        <option value="important">Ważne</option>
+                        <option value="list">Lista</option>
+                        <option value="code">Kod</option>
+                      </select>
+                      {paragraph.type === "title" && (
+                        <Title
+                          content={paragraph.value}
+                          img={paragraph.img}
+                          setContent={(content) =>
+                            setCourse({
+                              ...course,
+                              modules: [
+                                {
+                                  ...course.modules[module.id],
+                                  paragraphs: [
+                                    {
+                                      ...course.modules[module.id].paragraphs[
+                                        paragraph.id
+                                      ],
+                                      content,
+                                    },
+                                  ],
+                                },
+                              ],
+                            })
+                          }
+                        />
+                      )}
+                      {paragraph.type === "text" && (
+                        <Text content={paragraph.value} />
+                      )}
+                      {paragraph.type === "important" && (
+                        <Important content={paragraph.value} />
+                      )}
+                      {paragraph.type === "list" && (
+                        <List
+                          content={[...paragraph.value]}
+                          label={paragraph.label}
+                        />
+                      )}
+                      {paragraph.type === "code" && (
+                        <Code
+                          content={paragraph.value}
+                          language={paragraph.language}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </div>
+              ))}
+              <div className="d-flex gap-2">
+                <button
+                  onClick={(e) => addParagpraph(e, module.id)}
+                  className="btn btn-primary mt-3"
+                >
+                  Dodaj kolejny paragraf
+                </button>
+                {module.paragraphs.length > 1 && (
+                  <button
+                    onClick={(e) => deleteParagraph(e)}
+                    className="btn btn-danger mt-3"
+                  >
+                    Usuń paragraf
+                  </button>
+                )}
               </div>
-              <button className="btn btn-primary mt-3">
-                Dodaj kolejny paragraf
-              </button>
             </div>
           </div>
         ))}
         <div className="d-flex flex-column align-items-start">
-          <button
-            onClick={(e) => addLesson(e)}
-            className="btn btn-primary mt-3"
-          >
-            Dodaj kolejną lekcję
-          </button>
+          <div className="d-flex gap-2">
+            <button
+              onClick={(e) => addLesson(e)}
+              className="btn btn-primary mt-3"
+            >
+              Dodaj kolejną lekcję
+            </button>
+            {course.modules.length > 1 && (
+              <button
+                onClick={(e) => deleteLesson(e)}
+                className="btn btn-danger mt-3"
+              >
+                Usuń lekcję
+              </button>
+            )}
+          </div>
           <button type="submit" className="btn btn-success mt-3">
             Stwórz
           </button>

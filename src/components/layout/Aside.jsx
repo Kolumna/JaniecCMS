@@ -4,7 +4,7 @@ function Aside() {
   const { pathname } = useLocation();
 
   return (
-    <aside style={{ minHeight: "calc(100vh - 56px)" }} className="bg-dark p-4">
+    <aside style={{ minHeight: "calc(100vh - 71px)" }} className="bg-dark p-4">
       <nav className="bg-dark">
         <div className="d-flex flex-column gap-2">
           <Link
@@ -32,9 +32,14 @@ function Aside() {
             Kursy
           </Link>
           <Link
-            to="/dodaj"
-            className={`btn btn-success px-4 mt-3`}
+            to="/modules"
+            className={`btn ${
+              pathname === "/modules" ? "btn-primary" : "btn-light"
+            } px-4`}
           >
+            Kwalifikacje
+          </Link>
+          <Link to="/add" className={`btn btn-success px-4 mt-3`}>
             Dodaj
           </Link>
         </div>

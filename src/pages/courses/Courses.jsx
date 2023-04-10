@@ -30,7 +30,7 @@ function Courses() {
         <div>
           <h1>Kursy</h1>
           <Link to="/courses/add" className="btn btn-success mt-3">Dodaj kurs</Link>
-          <table className="table">
+          <table className="table mt-3">
             <thead>
               <tr>
                 <th scope="col">Nazwa</th>

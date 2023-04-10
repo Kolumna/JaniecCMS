@@ -8,6 +8,7 @@ import Courses from "./pages/courses/Courses";
 import Quizy from "./pages/quizy/Quizy";
 import AddQuiz from "./pages/quizy/AddQuiz";
 import EditQuiz from "./pages/quizy/EditQuiz";
+import Add from "./pages/aside/Add";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/quizy" element={<Quizy />} />
             <Route path="/quizy/add" element={<AddQuiz />} />
             <Route path="/quizy/edit/:id" element={<EditQuiz />} />
+            <Route path="/add" element={<Add />} />
           </Routes>
         </section>
       </main>

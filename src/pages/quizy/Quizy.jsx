@@ -56,7 +56,7 @@ function Quizy() {
               </a>
             </li>
           </ul>
-          <table className="table text-start">
+          <table className="table text-start mt-3">
             <thead>
               <tr>
                 <th scope="col">Id</th>
