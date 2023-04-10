@@ -6,7 +6,6 @@ import List from "../../components/course/paragraphs/List";
 import Code from "../../components/course/paragraphs/Code";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { nestedObjectToArray } from "../../helpers/nestedObject";
 
 function EditCourse() {
   const [course, setCourse] = useState({
@@ -63,7 +62,7 @@ function EditCourse() {
             {
               id: 0,
               type: "",
-              content: "",
+              value: "",
             },
           ],
         },
@@ -97,7 +96,7 @@ function EditCourse() {
       {
         id: newParagraph[module_id].paragraphs.length,
         type: "",
-        content: "",
+        value: "",
       },
     ];
     setCourse({ ...course, modules: newParagraph });
@@ -106,21 +105,43 @@ function EditCourse() {
   const deleteParagraph = (e) => {
     e.preventDefault();
 
-    setCourse({
-      ...course,
-      modules: [
-        {
-          id: course.modules.length - 1,
-          paragraphs: [
-            ...course.modules[course.modules.length - 1].paragraphs.slice(
-              0,
-              course.modules[course.modules.length - 1].paragraphs.length - 1
-            ),
-          ],
-        },
-      ],
-    });
+    const newParagraph = [...course.modules];
+    newParagraph[course.modules.length - 1].paragraphs = [
+      ...newParagraph[course.modules.length - 1].paragraphs.slice(
+        0,
+        newParagraph[course.modules.length - 1].paragraphs.length - 1
+      ),
+    ];
+    setCourse({ ...course, modules: newParagraph });
   };
+
+  const valueSetter = (e, paragraph_id, module_id, type, list) => {
+    const newParagraph = [...course.modules];
+    switch (type) {
+      case "text":
+        newParagraph[module_id].paragraphs[paragraph_id].value = e.target.value;
+        break;
+      case "label":
+        newParagraph[module_id].paragraphs[paragraph_id].label = e.target.value;
+        break;
+      case "img":
+        newParagraph[module_id].paragraphs[paragraph_id].img = e.target.value;
+        break;
+      case "code":
+        newParagraph[module_id].paragraphs[paragraph_id].code = e.target.value;
+        break;
+      case "list":
+        newParagraph[module_id].paragraphs[paragraph_id].value = list;
+        break;
+      case "language":
+        newParagraph[module_id].paragraphs[paragraph_id].language =
+          e.target.value;
+          break;
+    }
+    setCourse({ ...course, modules: newParagraph });
+  };
+
+  console.log(course.modules);
 
   useEffect(() => {
     getCourse();
@@ -187,69 +208,56 @@ function EditCourse() {
                         <Title
                           content={paragraph.value}
                           img={paragraph.img}
-                          setImg={(e) => {
-                            const newParagrapfs = [
-                              ...course.modules.paragraphs[module.id],
-                            ];
-                            newParagrapfs[paragraph.id].img = e.target.value;
-                            setCourse({
-                              ...course,
-                              modules: [
-                                {
-                                  ...course.modules[module.id],
-                                  paragraphs: newParagrapfs,
-                                },
-                              ],
-                            });
-                          }}
-                          setContent={(e) => {
-                            const newParagrapfs = [
-                              ...(course.modules[module.id].paragraphs ?? []),
-                            ];
-                            newParagrapfs[paragraph.id].value = e.target.value;
-                            setCourse({
-                              ...course,
-                              modules: [
-                                {
-                                  ...course.modules[module.id],
-                                  paragraphs: newParagrapfs,
-                                },
-                              ],
-                            });
-                          }}
+                          setImg={(e) =>
+                            valueSetter(e, paragraph.id, module.id, "img")
+                          }
+                          setContent={(e) =>
+                            valueSetter(e, paragraph.id, module.id, "text")
+                          }
                         />
                       )}
                       {paragraph.type === "text" && (
                         <Text
                           content={paragraph.value}
                           setContent={(e) => {
-                            const newParagrapfs = [
-                              ...course.modules[module.id].paragraphs,
-                            ];
-                            newParagrapfs[paragraph.id].value = e.target.value;
-                            setCourse({
-                              ...course,
-                              modules: [
-                                {
-                                  ...course.modules[module.id],
-                                  paragraphs: newParagrapfs,
-                                },
-                              ],
-                            });
+                            valueSetter(e, paragraph.id, module.id, "text");
                           }}
                         />
                       )}
                       {paragraph.type === "important" && (
-                        <Important content={paragraph.value} />
+                        <Important
+                          content={paragraph.value}
+                          setContent={(e) => {
+                            valueSetter(e, paragraph.id, module.id, "text");
+                          }}
+                        />
                       )}
                       {paragraph.type === "list" && (
                         <List
-                          content={[...paragraph.value]}
+                          content={paragraph.value}
                           label={paragraph.label}
+                          setLabel={(e) =>
+                            valueSetter(e, paragraph.id, module.id, "label")
+                          }
+                          setContent={(list) =>
+                            valueSetter(
+                              null,
+                              paragraph.id,
+                              module.id,
+                              "list",
+                              list
+                            )
+                          }
                         />
                       )}
                       {paragraph.type === "code" && (
                         <Code
+                          setContent={(e) =>
+                            valueSetter(e, paragraph.id, module.id, "text")
+                          }
+                          setLanguage={(e) =>
+                            valueSetter(e, paragraph.id, module.id, "language")
+                          }
                           content={paragraph.value}
                           language={paragraph.language}
                         />

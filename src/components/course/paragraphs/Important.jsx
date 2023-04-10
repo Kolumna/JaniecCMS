@@ -2,7 +2,11 @@ const Important = (props) => {
   return (
     <div>
       <label className="form-label mt-2">Treść</label>
-      <textarea value={props.content} className="form-control" />
+      <textarea
+        onChange={(e) => props.setContent(e)}
+        value={props.content}
+        className="form-control"
+      />
     </div>
   );
 };

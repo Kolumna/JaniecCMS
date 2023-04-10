@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const List = (props) => {
-  const [list, setList] = useState(props.content ?? []);
+  const [list, setList] = useState([...props.content] ?? []);
   const [item, setItem] = useState("");
 
   const addToList = (e) => {
@@ -13,11 +13,16 @@ const List = (props) => {
     setItem("");
   };
 
+  useEffect(() => {
+    props.setContent(list);
+    console.log(list, 'przeysylam')
+  }, [list]);
+
   console.log(list);
   return (
     <div>
       <label className="form-label mt-2">Napis</label>
-      <input value={props.label} className="form-control" />
+      <input onChange={(e) => props.setLabel(e)} value={props.label} className="form-control" />
       <label className="form-label mt-2">Lista</label>
       {list.map((item, index) => {
         return (
