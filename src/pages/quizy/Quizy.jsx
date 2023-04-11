@@ -2,10 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { objectToArrayWithId } from "../../helpers/object";
 import { Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 function Quizy() {
   const [quizy, setQuizy] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [auth] = useAuth();
 
   const getQuizy = async () => {
     setLoading(true);
@@ -19,10 +21,9 @@ function Quizy() {
   const deleteQuiz = async (id) => {
     await axios.delete(
       `https://examie-default-rtdb.europe-west1.firebasedatabase.app/quizes/inf03/${id}.json?auth=${
-        quiz.baza
-      }.json?auth=${
         auth?.userId === import.meta.env.VITE_PERMISSION ? auth.token : ""
-      }`
+      }`,
+      quizy.baza
     );
     getQuizy();
   };
