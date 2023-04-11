@@ -25,6 +25,7 @@ function App() {
     isAuth: false,
     user: null,
   });
+  console.log(auth)
 
   return (
     <Router>
