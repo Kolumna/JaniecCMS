@@ -141,8 +141,6 @@ function EditCourse() {
     setCourse({ ...course, modules: newParagraph });
   };
 
-  console.log(course.modules);
-
   useEffect(() => {
     getCourse();
   }, []);

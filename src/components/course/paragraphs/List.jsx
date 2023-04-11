@@ -26,7 +26,7 @@ const List = (props) => {
       <label className="form-label mt-2">Lista</label>
       {list.map((item, index) => {
         return (
-          <div className="d-flex mt-3 gap-2" key={index}>
+          <div className="input-group mt-3" key={index}>
             <input
               value={item}
               className="form-control"
@@ -37,7 +37,7 @@ const List = (props) => {
               }}
             />
             <button
-              className="btn btn-danger mt-2"
+              className="btn btn-outline-danger"
               onClick={() => {
                 const newList = [...list];
                 newList.splice(index, 1);
@@ -50,13 +50,13 @@ const List = (props) => {
         );
       })}
       <label className="mt-3">Nowy</label>
-      <div className="d-flex gap-2 mt-2">
+      <div className="input-group mt-3">
         <input
           value={item}
           className="form-control"
           onChange={(e) => setItem(e.target.value)}
         />
-        <button className="btn btn-success mt-2" onClick={(e) => addToList(e)}>
+        <button className="btn btn-outline-success" onClick={(e) => addToList(e)}>
           Dodaj
         </button>
       </div>

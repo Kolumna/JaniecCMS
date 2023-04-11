@@ -113,12 +113,38 @@ function AddCourse() {
     });
   };
 
-  console.log(course.modules);
+  const valueSetter = (e, paragraph_id, module_id, type, list) => {
+    const newParagraph = [...course.modules];
+    switch (type) {
+      case "text":
+        newParagraph[module_id].paragraphs[paragraph_id].value = e.target.value;
+        break;
+      case "label":
+        newParagraph[module_id].paragraphs[paragraph_id].label = e.target.value;
+        break;
+      case "img":
+        newParagraph[module_id].paragraphs[paragraph_id].img = e.target.value;
+        break;
+      case "code":
+        newParagraph[module_id].paragraphs[paragraph_id].code = e.target.value;
+        break;
+      case "list":
+        newParagraph[module_id].paragraphs[paragraph_id].value = list;
+        break;
+      case "language":
+        newParagraph[module_id].paragraphs[paragraph_id].language =
+          e.target.value;
+          break;
+    }
+    setCourse({ ...course, modules: newParagraph });
+  };
 
   return (
     <section className="px-5" style={{ width: "100%" }}>
-      <h1>Dodaj kurs</h1>
-      <form onSubmit={postCourse}>
+      <h1>
+        Dodawanie kursu: <strong>{course.name}</strong>
+      </h1>
+      <form onSubmit={(e) => postCourse(e)}>
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
             Nazwa kursu
@@ -174,69 +200,56 @@ function AddCourse() {
                         <Title
                           content={paragraph.value}
                           img={paragraph.img}
-                          setImg={(e) => {
-                            const newParagrapfs = [
-                              ...course.modules[module.id].paragraphs,
-                            ];
-                            newParagrapfs[paragraph.id].img = e.target.value;
-                            setCourse({
-                              ...course,
-                              modules: [
-                                {
-                                  ...course.modules[module.id],
-                                  paragraphs: newParagrapfs,
-                                },
-                              ],
-                            });
-                          }}
-                          setContent={(e) => {
-                            const newParagrapfs = [
-                              ...course.modules[module.id].paragraphs,
-                            ];
-                            newParagrapfs[paragraph.id].value = e.target.value;
-                            setCourse({
-                              ...course,
-                              modules: [
-                                {
-                                  ...course.modules[module.id],
-                                  paragraphs: newParagrapfs,
-                                },
-                              ],
-                            });
-                          }}
+                          setImg={(e) =>
+                            valueSetter(e, paragraph.id, module.id, "img")
+                          }
+                          setContent={(e) =>
+                            valueSetter(e, paragraph.id, module.id, "text")
+                          }
                         />
                       )}
                       {paragraph.type === "text" && (
                         <Text
                           content={paragraph.value}
                           setContent={(e) => {
-                            const newParagrapfs = [
-                              ...course.modules[module.id].paragraphs,
-                            ];
-                            newParagrapfs[paragraph.id].value = e.target.value;
-                            setCourse({
-                              ...course,
-                              modules: [
-                                {
-                                  ...course.modules[module.id],
-                                  paragraphs: newParagrapfs,
-                                },
-                              ],
-                            });
+                            valueSetter(e, paragraph.id, module.id, "text");
                           }}
                         />
                       )}
                       {paragraph.type === "important" && (
-                        <Important content={paragraph.value} />
+                        <Important
+                          content={paragraph.value}
+                          setContent={(e) => {
+                            valueSetter(e, paragraph.id, module.id, "text");
+                          }}
+                        />
                       )}
                       {paragraph.type === "list" && (
                         <List
-                          content={[...paragraph.value]}
+                          content={paragraph.value}
                           label={paragraph.label}
+                          setLabel={(e) =>
+                            valueSetter(e, paragraph.id, module.id, "label")
+                          }
+                          setContent={(list) =>
+                            valueSetter(
+                              null,
+                              paragraph.id,
+                              module.id,
+                              "list",
+                              list
+                            )
+                          }
                         />
                       )}
                       {paragraph.type === "code" && (
                         <Code
+                          setContent={(e) =>
+                            valueSetter(e, paragraph.id, module.id, "text")
+                          }
+                          setLanguage={(e) =>
+                            valueSetter(e, paragraph.id, module.id, "language")
+                          }
                           content={paragraph.value}
                           language={paragraph.language}
                         />
@@ -282,7 +295,7 @@ function AddCourse() {
             )}
           </div>
           <button type="submit" className="btn btn-success mt-3">
-            Stwórz
+            Dodaj
           </button>
         </div>
       </form>
