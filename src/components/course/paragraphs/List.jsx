@@ -15,14 +15,16 @@ const List = (props) => {
 
   useEffect(() => {
     props.setContent(list);
-    console.log(list, 'przeysylam')
   }, [list]);
 
-  console.log(list);
   return (
     <div>
       <label className="form-label mt-2">Napis</label>
-      <input onChange={(e) => props.setLabel(e)} value={props.label} className="form-control" />
+      <input
+        onChange={(e) => props.setLabel(e)}
+        value={props.label}
+        className="form-control"
+      />
       <label className="form-label mt-2">Lista</label>
       {list.map((item, index) => {
         return (
@@ -56,7 +58,10 @@ const List = (props) => {
           className="form-control"
           onChange={(e) => setItem(e.target.value)}
         />
-        <button className="btn btn-outline-success" onClick={(e) => addToList(e)}>
+        <button
+          className="btn btn-outline-success"
+          onClick={(e) => addToList(e)}
+        >
           Dodaj
         </button>
       </div>

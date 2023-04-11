@@ -6,6 +6,7 @@ import List from "../../components/course/paragraphs/List";
 import Code from "../../components/course/paragraphs/Code";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 function EditCourse() {
   const [course, setCourse] = useState({
@@ -25,6 +26,8 @@ function EditCourse() {
       },
     ],
   });
+  const [error, setError] = useState(null);
+  const [auth] = useAuth();
 
   const { id, courseName } = useParams();
 
@@ -32,20 +35,27 @@ function EditCourse() {
 
   const getCourse = async () => {
     const res = await axios.get(
-      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${courseName}/${id}.json`
+      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${courseName}/${id}.json?`
     );
     setCourse(res.data);
   };
 
   const patchCourse = async (e) => {
     e.preventDefault();
+    setError(null);
 
-    await axios.patch(
-      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${courseName}/${id}.json`,
-      JSON.stringify({ ...course, editDate: new Date().toJSON() })
-    );
+    try {
+      await axios.patch(
+        `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${courseName}/${id}.json?auth=${
+          auth?.userId === import.meta.env.VITE_PERMISSION ? auth.token : ""
+        }`,
+        JSON.stringify({ ...course, editDate: new Date().toJSON() })
+      );
+      navigate("/courses");
+    } catch (error) {
+      setError(error);
+    }
 
-    navigate("/courses");
   };
 
   const addLesson = (e) => {
@@ -136,7 +146,7 @@ function EditCourse() {
       case "language":
         newParagraph[module_id].paragraphs[paragraph_id].language =
           e.target.value;
-          break;
+        break;
     }
     setCourse({ ...course, modules: newParagraph });
   };
@@ -150,8 +160,9 @@ function EditCourse() {
       <h1>
         Edycja kursu: <strong>{course.name}</strong>
       </h1>
+      {error && <div className="alert alert-danger mt-3">Nie masz permisji!!</div>}
       <form onSubmit={(e) => patchCourse(e)}>
-        <div className="mb-3">
+        <div className="mb-3 mt-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
             Nazwa kursu
           </label>

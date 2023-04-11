@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 function AddQuiz() {
   const [quiz, setQuiz] = useState({
@@ -27,6 +28,8 @@ function AddQuiz() {
     ],
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [auth] = useAuth();
 
   const navigate = useNavigate();
 
@@ -34,22 +37,20 @@ function AddQuiz() {
     e.preventDefault();
     setLoading(true);
 
-    await axios.post(
-      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/quizes/${quiz.baza}.json`,
-      JSON.stringify(quiz)
-    );
-    setQuiz({
-      baza: "",
-      title: "",
-      img: "",
-      values: [
-        { name: "", correct: false },
-        { name: "", correct: false },
-        { name: "", correct: false },
-        { name: "", correct: false },
-      ],
-    });
-    navigate("/quizy");
+    try {
+      await axios.post(
+        `https://examie-default-rtdb.europe-west1.firebasedatabase.app/quizes/${
+          quiz.baza
+        }.json?auth=${
+          auth?.userId === import.meta.env.VITE_PERMISSION ? auth.token : ""
+        }`,
+        JSON.stringify(quiz)
+      );
+      navigate("/quizy");
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
   const answerHanlder = (e, index) => {
@@ -67,8 +68,11 @@ function AddQuiz() {
   return (
     <section style={{ width: "100%" }}>
       <h1>Dodaj Quiz</h1>
+      {error && (
+        <div className="alert alert-danger mt-3">Nie masz permisji!!</div>
+      )}
       <form onSubmit={submit}>
-        <div className="mb-3">
+        <div className="mb-3 mt-3">
           <label className="form-label">Baza</label>
           <select className="form-select">
             <option value="inf03">INF03</option>

@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logoIcon.svg";
+import useAuth from "../../hooks/useAuth";
 
 function Header() {
+  const [auth] = useAuth()
+
   return (
     <nav className="navbar bg-body-tertiary navbar-dark bg-dark p-2">
       <div className="container-fluid">
@@ -10,9 +13,9 @@ function Header() {
           <img src={logo} width={30} />
           <span style={{ fontWeight: 200, fontSize: 30 }}>CMS</span>
         </Link>
-        <span className="navbar-text">
-          Zalogowano jako <Link to="#">K0lumna</Link>
-        </span>
+        {auth && <span className="navbar-text">
+          Zalogowano jako <Link to="#">{auth.email}</Link>
+        </span>}
       </div>
     </nav>
   );

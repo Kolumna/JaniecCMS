@@ -8,9 +8,9 @@ function Aside() {
       <nav className="bg-dark">
         <div className="d-flex flex-column gap-2">
           <Link
-            to="/start"
+            to="/"
             className={`btn ${
-              pathname === "/start" ? "btn-primary" : "btn-light"
+              pathname === "/" ? "btn-primary" : "btn-light"
             } px-4`}
           >
             Start
@@ -30,14 +30,6 @@ function Aside() {
             } px-4`}
           >
             Kursy
-          </Link>
-          <Link
-            to="/modules"
-            className={`btn ${
-              pathname === "/modules" ? "btn-primary" : "btn-light"
-            } px-4`}
-          >
-            Kwalifikacje
           </Link>
           <Link to="/add" className={`btn btn-success px-4 mt-3`}>
             Dodaj

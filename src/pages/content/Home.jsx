@@ -1,7 +1,8 @@
+import Pages from "../aside/Pages";
 import Login from "../auth/Login";
 
 function Home() {
-  return <Login />;
+  return <Pages/>;
 }
 
 export default Home;

@@ -6,6 +6,7 @@ import List from "../../components/course/paragraphs/List";
 import Code from "../../components/course/paragraphs/Code";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 function AddCourse() {
   const [course, setCourse] = useState({
@@ -26,18 +27,26 @@ function AddCourse() {
     ],
     date: new Date().toJSON(),
   });
+  const [error, setError] = useState(null);
+  const [auth] = useAuth();
 
   const navigate = useNavigate();
 
   const postCourse = async (e) => {
     e.preventDefault();
+    setError(null);
 
-    await axios.post(
-      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${course.name.toLowerCase()}.json`,
-      course
-    );
-
-    navigate("/courses");
+    try {
+      await axios.post(
+        `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${course.name.toLowerCase()}.json?auth=${
+          auth?.userId === import.meta.env.VITE_PERMISSION ? auth.token : ""
+        }`,
+        course
+      );
+      navigate("/courses");
+    } catch (error) {
+      setError(error);
+    }
   };
 
   const addLesson = (e) => {
@@ -134,7 +143,7 @@ function AddCourse() {
       case "language":
         newParagraph[module_id].paragraphs[paragraph_id].language =
           e.target.value;
-          break;
+        break;
     }
     setCourse({ ...course, modules: newParagraph });
   };
@@ -144,8 +153,11 @@ function AddCourse() {
       <h1>
         Dodawanie kursu: <strong>{course.name}</strong>
       </h1>
+      {error && (
+        <div className="alert alert-danger mt-3">Nie masz permisji!!</div>
+      )}
       <form onSubmit={(e) => postCourse(e)}>
-        <div className="mb-3">
+        <div className="mb-3 mt-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
             Nazwa kursu
           </label>

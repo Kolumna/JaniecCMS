@@ -21,8 +21,6 @@ function Courses() {
     getCourses();
   }, []);
 
-  console.log(courses)
-
   return (
     <section>
       {loading ? (

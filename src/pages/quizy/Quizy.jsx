@@ -18,7 +18,11 @@ function Quizy() {
 
   const deleteQuiz = async (id) => {
     await axios.delete(
-      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/quizes/inf03/${id}.json`
+      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/quizes/inf03/${id}.json?auth=${
+        quiz.baza
+      }.json?auth=${
+        auth?.userId === import.meta.env.VITE_PERMISSION ? auth.token : ""
+      }`
     );
     getQuizy();
   };
