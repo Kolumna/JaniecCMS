@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 
 const List = (props) => {
-  const [list, setList] = useState(props.content ?? []);
+  const [list, setList] = useState(props.content === '' ? [] : props.content);
   const [item, setItem] = useState("");
+
+  console.log(list)
 
   const addToList = (e) => {
     e.preventDefault();
