@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 const List = (props) => {
-  const [list, setList] = useState([...props.content] ?? []);
+  const [list, setList] = useState(props.content ?? []);
   const [item, setItem] = useState("");
 
   const addToList = (e) => {
