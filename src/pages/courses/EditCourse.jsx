@@ -55,7 +55,6 @@ function EditCourse() {
     } catch (error) {
       setError(error);
     }
-
   };
 
   const addLesson = (e) => {
@@ -112,14 +111,14 @@ function EditCourse() {
     setCourse({ ...course, modules: newParagraph });
   };
 
-  const deleteParagraph = (e) => {
+  const deleteParagraph = (e, module_id) => {
     e.preventDefault();
 
     const newParagraph = [...course.modules];
-    newParagraph[course.modules.length - 1].paragraphs = [
-      ...newParagraph[course.modules.length - 1].paragraphs.slice(
+    newParagraph[module_id].paragraphs = [
+      ...newParagraph[module_id].paragraphs.slice(
         0,
-        newParagraph[course.modules.length - 1].paragraphs.length - 1
+        newParagraph[module_id].paragraphs.length - 1
       ),
     ];
     setCourse({ ...course, modules: newParagraph });
@@ -160,7 +159,9 @@ function EditCourse() {
       <h1>
         Edycja kursu: <strong>{course.name}</strong>
       </h1>
-      {error && <div className="alert alert-danger mt-3">Nie masz permisji!!</div>}
+      {error && (
+        <div className="alert alert-danger mt-3">Nie masz permisji!!</div>
+      )}
       <form onSubmit={(e) => patchCourse(e)}>
         <div className="mb-3 mt-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
@@ -284,7 +285,7 @@ function EditCourse() {
                 </button>
                 {module.paragraphs.length > 1 && (
                   <button
-                    onClick={(e) => deleteParagraph(e)}
+                    onClick={(e) => deleteParagraph(e, module.id)}
                     className="btn btn-danger mt-3"
                   >
                     Usuń paragraf
