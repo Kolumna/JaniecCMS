@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { objectToArrayWithId } from "../../helpers/object";
 import { Link } from "react-router-dom";
 import { nestedObjectToArray } from "../../helpers/nestedObject";
+import useAuth from "../../hooks/useAuth";
 
 function Courses() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [auth] = useAuth();
 
   const getCourses = async () => {
     setLoading(true);
@@ -15,6 +17,15 @@ function Courses() {
     );
     setCourses(nestedObjectToArray(res.data));
     setLoading(false);
+  };
+
+  const deleteCourse = async (name) => {
+    await axios.delete(
+      `https://examie-default-rtdb.europe-west1.firebasedatabase.app/courses/${name}.json?auth=${
+        auth?.userId === import.meta.env.VITE_PERMISSION ? auth.token : ""
+      }`
+    );
+    getCourses();
   };
 
   useEffect(() => {
@@ -42,8 +53,8 @@ function Courses() {
               </tr>
             </thead>
             <tbody>
-              {courses.map((course, key) => (
-                <tr key={key}>
+              {courses.map((course) => (
+                <tr key={course._id}>
                   <td>{course.name}</td>
                   <td>{course.modules.length}</td>
                   <td>{course.editDate ?? course.date}</td>
@@ -67,7 +78,12 @@ function Courses() {
                     </Link>
                   </td>
                   <td>
-                    <button className="btn btn-danger">Usuń</button>
+                    <button
+                      onClick={() => deleteCourse(course.name.toLowerCase())}
+                      className="btn btn-danger"
+                    >
+                      Usuń
+                    </button>
                   </td>
                 </tr>
               ))}
