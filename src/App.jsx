@@ -19,6 +19,8 @@ import EditCourse from "./pages/courses/EditCourse";
 import AuthContext from "./context/authContext";
 import { useState } from "react";
 import Login from "./pages/auth/Login";
+import Modules from "./pages/modules/Modules";
+import AddModule from "./pages/modules/AddModule";
 
 function App() {
   const [auth, setAuth] = useState({
@@ -61,6 +63,9 @@ function App() {
                   <Route path="/quizy" element={<Quizy />} />
                   <Route path="/quizy/add" element={<AddQuiz />} />
                   <Route path="/quizy/edit/:id" element={<EditQuiz />} />
+                  <Route path="/modules" element={<Modules />} />
+                  <Route path="/modules/add" element={<AddModule />} />
+                  <Route path="/modules/edit/:id" element={<EditQuiz />} />
                   <Route path="/add" element={<Add />} />
                 </>
               ) : (

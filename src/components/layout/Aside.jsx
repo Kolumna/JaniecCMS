@@ -31,6 +31,14 @@ function Aside() {
           >
             Kursy
           </Link>
+          <Link
+            to="/modules"
+            className={`btn ${
+              pathname === "/modules" ? "btn-primary" : "btn-light"
+            } px-4`}
+          >
+            Moduły
+          </Link>
           <Link to="/add" className={`btn btn-success px-4 mt-3`}>
             Dodaj
           </Link>

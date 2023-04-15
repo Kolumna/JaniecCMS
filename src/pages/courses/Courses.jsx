@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { objectToArrayWithId } from "../../helpers/object";
 import { Link } from "react-router-dom";
 import { nestedObjectToArray } from "../../helpers/nestedObject";
 import useAuth from "../../hooks/useAuth";

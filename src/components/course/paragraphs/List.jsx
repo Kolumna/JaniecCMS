@@ -4,8 +4,6 @@ const List = (props) => {
   const [list, setList] = useState(props.content === '' ? [] : props.content);
   const [item, setItem] = useState("");
 
-  console.log(list)
-
   const addToList = (e) => {
     e.preventDefault();
 
@@ -28,7 +26,7 @@ const List = (props) => {
         className="form-control"
       />
       <label className="form-label mt-2">Lista</label>
-      {list.map((item, index) => {
+      {list?.map((item, index) => {
         return (
           <div className="input-group mt-3" key={index}>
             <input
