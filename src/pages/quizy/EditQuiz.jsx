@@ -112,6 +112,7 @@ function EditQuiz() {
             type="text"
             className="form-control"
           />
+          <img className="mt-4" width={200} src={quiz.img} />
         </div>
         <div className="card mt-3">
           <div className="card-body">

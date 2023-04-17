@@ -15,6 +15,31 @@ function EditCourse() {
       {
         id: 0,
         nazwa: "",
+        summary: {
+          quiz: {
+            pytanie: "",
+            odpowiedzi: [
+              {
+                value: "",
+                correct: false,
+              },
+              {
+                value: "",
+                correct: false,
+              },
+              {
+                value: "",
+                correct: false,
+              },
+              {
+                value: "",
+                correct: false,
+              },
+            ],
+          },
+          film: "",
+          zadanie: "",
+        },
         paragraphs: [
           {
             id: 0,
@@ -67,6 +92,31 @@ function EditCourse() {
         {
           id: course.modules.length,
           nazwa: "",
+          summary: {
+            quiz: {
+              pytanie: "",
+              odpowiedzi: [
+                {
+                  value: "",
+                  correct: false,
+                },
+                {
+                  value: "",
+                  correct: false,
+                },
+                {
+                  value: "",
+                  correct: false,
+                },
+                {
+                  value: "",
+                  correct: false,
+                },
+              ],
+            },
+            film: "",
+            zadanie: "",
+          },
           paragraphs: [
             {
               id: 0,
@@ -78,6 +128,8 @@ function EditCourse() {
       ],
     });
   };
+
+  console.log(course.modules);
 
   const deleteLesson = (e) => {
     e.preventDefault();
@@ -191,6 +243,167 @@ function EditCourse() {
                 type="text"
                 className="form-control"
               />
+              <div className="card mt-3">
+                <div className="card-body">
+                  <div>
+                    <h5 className="card-title">Podsumowanie</h5>
+                    <label className="form-label mt-2">Pytanie do Quizu</label>
+                    <input
+                      onChange={(e) => {
+                        const newModules = [...course.modules];
+                        newModules[module.id].summary.quiz.pytanie =
+                          e.target.value;
+                        setCourse({ ...course, modules: newModules });
+                      }}
+                      value={module.summary.quiz.pytanie}
+                      type="text"
+                      className="form-control"
+                    />
+                    <label className="form-label mt-2">Odpowiedź 1</label>
+                    <div className="input-group mb-3">
+                      <div className="input-group-text">
+                        <input
+                          className="form-check-input mt-0"
+                          type="checkbox"
+                          onChange={(e) => {
+                            const newModules = [...course.modules];
+                            newModules[
+                              module.id
+                            ].summary.quiz.odpowiedzi[0].correct =
+                              e.target.checked;
+                            setCourse({ ...course, modules: newModules });
+                          }}
+                          checked={module.summary.quiz.odpowiedzi[0].correct}
+                        />
+                      </div>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          const newModules = [...course.modules];
+                          newModules[
+                            module.id
+                          ].summary.quiz.odpowiedzi[0].value = e.target.value;
+                          setCourse({ ...course, modules: newModules });
+                        }}
+                        value={module.summary.quiz.odpowiedzi[0].value}
+                        className="form-control"
+                      />
+                    </div>
+                    <label className="form-label mt-2">Odpowiedź 2</label>
+                    <div className="input-group mb-3">
+                      <div className="input-group-text">
+                        <input
+                          className="form-check-input mt-0"
+                          type="checkbox"
+                          onChange={(e) => {
+                            const newModules = [...course.modules];
+                            newModules[
+                              module.id
+                            ].summary.quiz.odpowiedzi[1].correct =
+                              e.target.checked;
+                            setCourse({ ...course, modules: newModules });
+                          }}
+                          checked={module.summary.quiz.odpowiedzi[1].correct}
+                        />
+                      </div>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          const newModules = [...course.modules];
+                          newModules[
+                            module.id
+                          ].summary.quiz.odpowiedzi[1].value = e.target.value;
+                          setCourse({ ...course, modules: newModules });
+                        }}
+                        className="form-control"
+                        value={module.summary.quiz.odpowiedzi[1].value}
+                      />
+                    </div>
+                    <label className="form-label mt-2">Odpowiedź 3</label>
+                    <div className="input-group mb-3">
+                      <div className="input-group-text">
+                        <input
+                          className="form-check-input mt-0"
+                          type="checkbox"
+                          onChange={(e) => {
+                            const newModules = [...course.modules];
+                            newModules[
+                              module.id
+                            ].summary.quiz.odpowiedzi[2].correct =
+                              e.target.checked;
+                            setCourse({ ...course, modules: newModules });
+                          }}
+                          checked={module.summary.quiz.odpowiedzi[2].correct}
+                        />
+                      </div>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          const newModules = [...course.modules];
+                          newModules[
+                            module.id
+                          ].summary.quiz.odpowiedzi[2].value = e.target.value;
+                          setCourse({ ...course, modules: newModules });
+                        }}
+                        className="form-control"
+                        value={module.summary.quiz.odpowiedzi[2].value}
+                      />
+                    </div>
+                    <label className="form-label mt-2">Odpowiedź 4</label>
+                    <div className="input-group mb-3">
+                      <div className="input-group-text">
+                        <input
+                          className="form-check-input mt-0"
+                          type="checkbox"
+                          onChange={(e) => {
+                            const newModules = [...course.modules];
+                            newModules[
+                              module.id
+                            ].summary.quiz.odpowiedzi[3].correct =
+                              e.target.checked;
+                            setCourse({ ...course, modules: newModules });
+                          }}
+                          checked={module.summary.quiz.odpowiedzi[3].correct}
+                        />
+                      </div>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          const newModules = [...course.modules];
+                          newModules[
+                            module.id
+                          ].summary.quiz.odpowiedzi[3].value = e.target.value;
+                          setCourse({ ...course, modules: newModules });
+                        }}
+                        value={module.summary.quiz.odpowiedzi[3].value}
+                        className="form-control"
+                      />
+                    </div>
+                    <label className="form-label mt-2">Link do filmu</label>
+                    <input
+                      value={module.summary.film}
+                      onChange={(e) => {
+                        const newModules = [...course.modules];
+                        newModules[module.id].summary.film = e.target.value;
+                        setCourse({ ...course, modules: newModules });
+                      }}
+                      type="text"
+                      className="form-control"
+                    />
+                    <label className="form-label mt-2">Zadanie</label>
+                    <input
+                      value={module.summary.zadanie}
+                      onChange={(e) => {
+                        const newModules = [...course.modules];
+                        newModules[module.id].summary.zadanie = e.target.value;
+                        setCourse({ ...course, modules: newModules });
+                      }}
+                      type="text"
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+              </div>
               {module.paragraphs.map((paragraph) => (
                 <div key={paragraph.id} className="card mt-3">
                   <div className="card-body">
