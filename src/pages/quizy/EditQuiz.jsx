@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { objectToArrayWithId } from "../../helpers/object";
 import useAuth from "../../hooks/useAuth";
 
 function EditQuiz() {

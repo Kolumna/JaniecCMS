@@ -129,8 +129,6 @@ function EditCourse() {
     });
   };
 
-  console.log(course.modules);
-
   const deleteLesson = (e) => {
     e.preventDefault();
 
